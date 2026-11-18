@@ -1,0 +1,50 @@
+LTspice 17.2.4 for MacOS
+Circuit: * /Users/abisheksingh/Documents/Codex/2026-10-28/ca/outputs/Unified_Supervisor/Unified_Supervisor.asc
+Start Time: Wed Oct 28 23:22:50 2026
+Warning: Multiple definitions of model "2scr375p" Type: BJT
+Warning: Multiple definitions of model "bc857b" Type: BJT
+Warning: Multiple definitions of model "bc847c" Type: BJT
+Warning: Multiple definitions of model "bc847b" Type: BJT
+solver = Normal
+Maximum thread count: 8
+tnom = 27
+temp = 27
+method = Gear
+reltol = 0.003
+CompressWinPoints = 1024
+Direct Newton iteration failed to find .op point.  (Use ".option noopiter" to skip.)
+Starting Gmin stepping
+Gmin = 10
+Gmin = 1.07374
+Gmin = 0.115292
+Gmin = 0.0123794
+Gmin = 0.00132923
+Gmin = 0.000142725
+Gmin = 1.5325e-05
+Gmin = 1.6455e-06
+Gmin = 1.76685e-07
+Gmin = 1.89714e-08
+Gmin = 2.03704e-09
+Gmin = 2.18725e-10
+Gmin = 2.34854e-11
+Gmin = 2.52173e-12
+Gmin = 2.70769e-13
+Gmin = 0
+Gmin stepping succeeded in finding the operating point.
+
+
+coil_normal: AVG(i(l1))=0.395653 FROM 1 TO 1.4
+sense_normal: AVG(v(i_filt))=1.42756 FROM 1 TO 1.4
+v5_min: MIN(v(v5))=4.99803 FROM 0 TO 6.4
+delay_rise=0.0790822 FROM 0.500006 TO 0.579088
+open_under: AVG(v(fu))=4.88489 FROM 1.8 TO 2.1
+lowtest_under: AVG(v(fu))=4.88489 FROM 3.7 TO 3.85
+hightest_over: AVG(v(fo))=4.87809 FROM 4.05 TO 4.2
+hightest_coil: AVG(i(l1))=0.395595 FROM 4.05 TO 4.2
+stuck_fault: AVG(v(fs))=4.87807 FROM 5.2 TO 5.6
+idle_fault: MAX(v(fault))=1.98034e-10 FROM 0.1 TO 0.4
+normal_fault: MAX(v(fault))=1.98113e-10 FROM 0.7 TO 1.4
+turnoff_fault: MAX(v(fault))=2.02362e-08 FROM 2.5 TO 2.9
+
+Total elapsed time: 5.991 seconds.
+

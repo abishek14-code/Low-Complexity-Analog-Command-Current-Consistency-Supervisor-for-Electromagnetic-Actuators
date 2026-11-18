@@ -1,0 +1,10 @@
+# LTspice files regenerated on every Run (saved copies live in simulation/ltspice/results/)
+simulation/ltspice/*.raw
+simulation/ltspice/*.log
+simulation/ltspice/*.op.raw
+simulation/ltspice/*.bak
+*.backup
+# OS / editor
+.DS_Store
+Thumbs.db
+~$*

@@ -1,0 +1,344 @@
+* Unified supervisor component models. See README.md for fidelity and sources.
+* Copyright (c) 1998-2021 Analog Devices, Inc.  All rights reserved.
+*
+.subckt level2 1 2 3 4 5
+S1 5 3 X 5 Q
+S2 4 5 5 X Q
+A1 2 1 0 0 0 0 X 0 OTA G={Avol/Rout} ref={Vos} Iout={slew*Cout} Cout={Cout} en={en} enk={enk} in={in} ink={ink} incm={incm} incmk={incmk} Vhigh=1e308 Vlow=-1e308
+C3 5 4 1p
+C4 3 5 1p
+R2 X 4 {2*Rout} noiseless
+R1 3 X {2*Rout} noiseless
+R3 3 1 {2*Rin} noiseless
+R4 3 2 {2*Rin} noiseless
+R5 2 4 {2*Rin} noiseless
+R6 1 4 {2*Rin} noiseless
+B1 X 0 I=if(V(x,3)<0,0,({2*slew*Cout}*V(x,3))**2)
+B2 0 X I=if(V(x,4)>0,0,({2*slew*Cout}*V(4,x))**2)
+D1 5 3 X
+D2 4 5 X
+.param Rout=100Meg
+.param Cout={Avol/GBW/2/pi/Rout}
+.model Q SW(Ron=10 Roff=10Meg Vt=0 Vh=-.1 Vser={Rail} ilimit={Ilimit} noiseless level=2 epsilon={Rail/10})
+.param Avol=1Meg GBW=10Meg Slew=10Meg ilimit=25m rail=0 Vos=0
+.param en=0 enk=0 in=0 ink=0 incm=0 incmk=0 Rin=1G
+.model X D(Ron=1 epsilon=10 noiseless)
+.ends level2
+*source LM2901
+* PSpice Model Editor - Version 17.4.0
+*$
+*LM2901
+*****************************************************************************
+* (C) Copyright 2022 Texas Instruments Incorporated. All rights reserved.
+*****************************************************************************
+** This model is designed as an aid for customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of 
+** merchantability or fitness for a particular purpose.  The model is
+** provided solely on an "as is" basis.  The entire risk as to its quality
+** and performance is with the customer.
+*****************************************************************************
+*
+* This model is subject to change without notice. Texas Instruments
+* Incorporated is not responsible for updating this model
+*
+*****************************************************************************
+*
+** Released by: Texas Instruments Inc.
+* Part: LM2901
+* Date: 1/31/2023
+* Model Type: All In One
+* Simulator: PSPICE 
+* Simulator Version: 17.4.0.p001
+* EVM Order Number: N/A 
+* EVM Users Guide:  N/A 
+* Datasheet: SLCS006V
+* Model Version: 1.0
+*
+*****************************************************************************
+*
+* Updates:
+*
+* Version 1.0 : Release to Web        
+*
+*****************************************************************************
+* Model Notes:
+*  Modeled parameters:
+*  Supply Voltage Ranges 
+*  Input Voltage Range 
+*  Supply Current 
+*  Input Bias Currents 
+*  Typical Offset Voltage 
+*  Propagation Delay 
+* Error Conditions:
+* If the input goes beyond the recommended input voltage range, the output will float to mid supply 
+* If the supplies goes beyond the recommended supply voltage ranges, the output will float to mid supply
+* The real device will NOT do this.
+*
+******************************************************************************
+* source LM2901
+.SUBCKT LM2901 IN+ IN- Vcc GND OUT 
+R_RIS         N859943 VCC  1u TC=0,0 
+I_IBN         IN- GND DC -3.5n  
+X_U5 N859997 GND N860457 0 V+_BUFFER V-_BUFFER VCC N860405 OUT Output_Stage  
+X_U4 N860391 N860397 Prop_Delay  
+X_U2 IN-BUFF IN+BUFF N860457 V+_BUFFER V-_BUFFER INPUTRANGE  
+C_CINNL         GND IN-  0.5p  TC=0,0 
+X_U6 GND V+_BUFFER V-_BUFFER VCC Supply_Buffer  
+X_U1 IN+ IN+BUFF IN- IN-BUFF Input_Buffer  
+I_IBP         IN+ GND DC -3.5n  
+C_CINPH         IN+ VCC  0.5p  TC=0,0 
+X_U7 N859997 0 V+_BUFFER V-_BUFFER Supply_Enable  
+E_E1         N860405 V-_BUFFER N860397 V-_BUFFER 2
+I_IS         N859943 GND DC 275u  
+C_CINPL         GND IN+  0.5p  TC=0,0 
+C_CINNH         IN- VCC  0.5p  TC=0,0 
+X_U3         N860177 IN-BUFF N860391 V+_BUFFER V-_BUFFER N860477 HPA_COMPHYS
+V_VOS         N860177 IN+BUFF 0.37m
+V_VHYST         N860477 0 0
+X_DESD3          GND IN+ DESD PARAMS: AREA=1.0
+X_DESD5          GND IN- DESD PARAMS: AREA=1.0
+.ENDS
+ 
+.SUBCKT Supply_Enable EN POR V+_BUFFER V-_BUFFER  
+V_VS_MIN_SET         N780252 0 1.99
+X_U13         V+_BUFFER V-_BUFFER N780066 1V 0 Difference
+X_U16         N780086 POR EN 1V 0 ORGATE 
+V_VS_MAX_SET         N779976 0 36.01
+V_VLOGIC         1V 0 1
+X_U15         N780252 N780066 POR 1V 0 VCC_Range
+X_U5         N780066 N779976 N780086 1V 0 VCC_Range
+.ENDS
+ 
+.SUBCKT Input_Buffer IN+ IN+_BUFF IN- IN-_BUFF  
+X_U1         IN+ IN- IN+_BUFF IN-_BUFF SUPPLY_BUFFER1 
+.ENDS
+ 
+.SUBCKT Supply_Buffer GND V+_BUFFER V-_BUFFER Vcc  
+X_U1         VCC GND V+_BUFFER V-_BUFFER SUPPLY_BUFFER1 
+.ENDS
+ 
+.SUBCKT INPUTRANGE INN INP INRANGE V+_BUFFER V-_BUFFER  
+V_VCMNN         N20539 V-_BUFFER -110m
+X_U1         N20155 INP N20826 V+_BUFFER V-_BUFFER VINRANGE_393
+X_U21         N202710 INN N20833 V+_BUFFER V-_BUFFER VINRANGE_393
+X_U22         INP N20415 N20840 V+_BUFFER V-_BUFFER VINRANGE_393
+X_U23         INN N20539 N20531 V+_BUFFER V-_BUFFER VINRANGE_393
+V_VCMPN         N202710 V+_BUFFER -2
+V_VCMNP         N20415 V-_BUFFER -110m
+V_VCMPP         N20155 V+_BUFFER -2
+X_U24         N20826 N20833 N20840 N20531 INRANGE V+_BUFFER V-_BUFFER 4ORGATE 
+.ENDS
+ 
+.SUBCKT Prop_Delay VIN VOUT  
+R_RS         N03175 VIN  50 TC=0,0 
+T_TPD         N03175 0 VOUT 0 Z0=50 TD=1u  
+R_RT         0 VOUT  50 TC=0,0 
+.ENDS
+ 
+.SUBCKT Output_Stage EN GND IN_RANGE POR V+_BUFFER V-_BUFFER Vcc VIN VOUT  
+X_SVOL    N774212 N774290 GND N850209 Output_Stage_SVOL 
+X_U7         MID V+_BUFFER V-_BUFFER MID_SUPPLY
+C_COUTL         GND VOUT  0.5p  TC=0,0 
+X_SMID    CONTROL_MID 0 N778484 MID Output_Stage_SMID 
+X_U9         CONTROL_HIZ N789513 1V 0 INVERTER
+X_U3         VIN N774212 V+_BUFFER V-_BUFFER VCC N774290 DIGLEVSHIFT
+C_COUTH         VOUT VCC  0.5p  TC=0,0 
+X_SHIZ    CONTROL_HIZ 0 N778484 N778496 Output_Stage_SHIZ 
+V_VLOGIC         1V 0 1
+V_V1         VCC N774290 1
+X_U10         N789513 POR CONTROL_MID 1V 0 ORGATE 
+R_ROUTL         N850209 N778496  60 TC=0,0 
+X_U8          POR IN_RANGE EN EN CONTROL_HIZ 1V 0 4ORGATE
+L_L1         N778484 VOUT  1n  
+.ENDS
+
+.subckt Output_Stage_SVOL 1 2 3 4  
+S_SVOL         3 4 1 2 _SVOL
+RS_SVOL         1 2 1G
+.MODEL         _SVOL VSWITCH Roff=1e12 Ron=1.0 Voff=1 Von=0
+.ends Output_Stage_SVOL
+
+.subckt Output_Stage_SMID 1 2 3 4  
+S_SMID         3 4 1 2 _SMID
+RS_SMID         1 2 1G
+.MODEL         _SMID VSWITCH Roff=1e12 Ron=1.0 Voff=1 Von=0
+.ends Output_Stage_SMID
+
+.subckt Output_Stage_SHIZ 1 2 3 4  
+S_SHIZ         3 4 1 2 _SHIZ
+RS_SHIZ         1 2 1G
+.MODEL         _SHIZ VSWITCH Roff=1e12 Ron=1.0 Voff=1 Von=0
+.ends Output_Stage_SHIZ
+
+
+.SUBCKT HPA_COMPHYS INP INN OUT_OUT VDD VSS VHYS
+EVMID VMID 0 VALUE = { ( V(VDD) + V(VSS) )/2 }
+EVH VH 0 VALUE = { ( V(VHYS)/2) }
+EINNNEW INNNEW 0 VALUE = { IF( ( V(OUT_OUT) < V(VMID) ),(V(INN) + (V(VH))),( V(INN) - V(VH) ) ) }
+EOUT OUT 0 VALUE = { IF( ( V(INP) > V(INNNEW) ), V(VDD), V(VSS) ) }
+R1 OUT OUT_OUT 1
+C1 OUT_OUT 0 1e-12
+.ENDS
+*$
+.SUBCKT DIGLEVSHIFT 1 2 VDD_OLD VSS_OLD VDD_NEW VSS_NEW
+*E1 3 0 VALUE = { IF( V(1) < (V(VDD_OLD)+V(VSS_OLD))/2, V(VSS_NEW), V(VDD_NEW) ) }
+E1 3 0 VALUE = { IF( V(1) < 1, V(VSS_NEW), V(VDD_NEW) ) }
+R1 3 2 1
+*C1 2 0 1e-12
+.ENDS
+*$
+.SUBCKT INVERTER 1 2 VDD VSS
+E2 2 0 VALUE = { IF( V(1)> (V(VDD)+V(VSS))/2, V(VSS), V(VDD) ) }
+C1 1 0 1e-12
+.ENDS
+*$
+.SUBCKT MID_SUPPLY OUT VDD VSS
+EVMID VMID 0 VALUE = { ( V(VDD) + V(VSS) )/2 }
+EOUT OUT 0 VALUE = {V(VMID)}
+.ENDS
+*$
+.SUBCKT ORGATE 1 2 3 VDD VSS
+E1 4 0 VALUE = { IF( ((V(1)< (V(VDD)+V(VSS))/2 ) & (V(2)< (V(VDD)+V(VSS))/2 )), V(VSS), V(VDD) ) }
+R1 4 3 1
+C1 3 0 1e-12
+.ENDS
+*$
+.SUBCKT Difference 1 2 OUT VDD VSS 
+EOUT OUT1 0 VALUE = { V(1)- V(2)}
+R1 OUT1 OUT 1
+*C1 OUT 0 1e-12
+.ENDS
+*$
+.SUBCKT SUPPLY_BUFFER1 1 2 VDD_NEW VSS_NEW 
+EVDD_NEW VDD_NEW 0 VALUE = {V(1)}
+EVSS_NEW VSS_NEW 0 VALUE = {V(2)}
+.ENDS
+*$
+.SUBCKT VCC_Range 1 2 OUT VDD VSS 
+EOUT OUT2 0 VALUE = { IF( ( V(1) >= V(2) ), V(VDD), V(VSS) ) }
+R1 OUT OUT2 1
+C1 OUT 0 1e-12
+.ENDS
+*$
+.SUBCKT VINRANGE_393 1 2 OUT VDD VSS 
+EOUT OUT2 0 VALUE = { IF( ( V(1) >= V(2) ), V(VSS), V(VDD) ) }
+R1 OUT2 OUT 1
+C1 OUT 0 1e-12
+.ENDS
+*$
+.SUBCKT 4ORGATE 1 2 3 4 5 VDD VSS
+E1 6 0 VALUE = { IF( ((V(1)> (V(VDD)+V(VSS))/2 ) | (V(2)> (V(VDD)+V(VSS))/2 ) | (V(3)> (V(VDD)+V(VSS))/2 ) | (V(4)> (V(VDD)+V(VSS))/2 )), V(VDD), V(VSS) ) }
+R1 5 6 1
+.ENDS
+*$
+.subckt DESD AN CAT 
++ params:
++ AREA=1.0
++ IS=10f
++ RS=5
++ BV=100
+D_DESD AN CAT model22 {area} 
+.model model22 d
++ is={IS}
++ rs={RS}
++ bv={BV}
+.ends DESD
+* LM358 engineering approximation using ADI universal op-amp core.
+* TI modern PSpice LM358 model did not converge in LTspice 17.2.4.
+.subckt LM358_APPROX P N VP VN OUT
+XCORE P N VP VN OUT level2 Avol=100k GBW=700k Slew=300k Ilimit=20m Rail=.01 Vos=2m Rin=1G
+IBP P VN 20n
+IBN N VN 20n
+IQ VP VN 350u
+.ends
+.subckt LM358_DUAL OA NA PA GN PB NB OB VP
+XA PA NA VP GN OA LM358_APPROX
+XB PB NB VP GN OB LM358_APPROX
+.ends
+.subckt LM339_QUAD O1 O2 VP N2 P2 N1 P1 N3 P3 N4 P4 GN O4 O3
+XA P1 N1 VP GN O1 LM2901
+XB P2 N2 VP GN O2 LM2901
+XC P3 N3 VP GN O3 LM2901
+XD P4 N4 VP GN O4 LM2901
+.ends
+* Functional HC gates, 0.5Vcc threshold, finite output resistance, input capacitance.
+* Output loading and supply current included; not a vendor transistor-level HC model.
+.func hc(v,s) .5*(1+tanh((v-s/2)/.05))
+.subckt HC_AND A B Y VP GN
+B0 Z GN V=V(VP,GN)*hc(V(A,GN),V(VP,GN))*hc(V(B,GN),V(VP,GN))
+RO Z Y 40
+CO Y GN 10p
+CA A GN 3p
+CB B GN 3p
+BQ VP GN I=max(0,I(RO))
+.ends
+.subckt HC_OR A B Y VP GN
+B0 Z GN V=V(VP,GN)*(1-(1-hc(V(A,GN),V(VP,GN)))*(1-hc(V(B,GN),V(VP,GN))))
+RO Z Y 40
+CO Y GN 10p
+CA A GN 3p
+CB B GN 3p
+BQ VP GN I=max(0,I(RO))
+.ends
+.subckt HC_INV A Y VP GN
+B0 Z GN V=V(VP,GN)*(1-hc(V(A,GN),V(VP,GN)))
+RO Z Y 40
+CO Y GN 10p
+CA A GN 3p
+BQ VP GN I=max(0,I(RO))
+.ends
+.subckt HC08 A1 B1 Y1 A2 B2 Y2 GN Y3 A3 B3 Y4 A4 B4 VP
+X1 A1 B1 Y1 VP GN HC_AND
+X2 A2 B2 Y2 VP GN HC_AND
+X3 A3 B3 Y3 VP GN HC_AND
+X4 A4 B4 Y4 VP GN HC_AND
+.ends
+.subckt HC32 A1 B1 Y1 A2 B2 Y2 GN Y3 A3 B3 Y4 A4 B4 VP
+X1 A1 B1 Y1 VP GN HC_OR
+X2 A2 B2 Y2 VP GN HC_OR
+X3 A3 B3 Y3 VP GN HC_OR
+X4 A4 B4 Y4 VP GN HC_OR
+.ends
+.subckt HC04 A1 Y1 A2 Y2 A3 Y3 GN Y4 A4 Y5 A5 Y6 A6 VP
+X1 A1 Y1 VP GN HC_INV
+X2 A2 Y2 VP GN HC_INV
+X3 A3 Y3 VP GN HC_INV
+X4 A4 Y4 VP GN HC_INV
+X5 A5 Y5 VP GN HC_INV
+X6 A6 Y6 VP GN HC_INV
+.ends
+* Nominal 7805 approximation: dropout 2V, finite regulation, input current accounting.
+.subckt REG7805 IN GN OUT
+BREG Z GN V=limit(V(IN,GN)-2,0,5)
+RO Z OUT .05
+BI IN GN I=5m+max(0,I(RO))
+.ends
+.subckt POT10K HI W LO params: K=.5
+RT HI W {10000*(1-K)}
+RB W LO {10000*K}
+.ends
+* Manual switches use a scripted contact-position source, not extra physical components.
+.func swpos(t,k) if(k==0,1,if(k==1,table(t,0,1,1.5,1,1.50001,0,2.2,0,2.20001,1),if(k==4,table(t,0,0,.5,0,.50001,1,2.5,1,2.50001,0,3,0,3.00001,1,4.6,1,4.60001,0),if(k==5,table(t,0,0,5,0,5.00001,1,5.8,1,5.80001,0),if(k==2,table(t,0,0,3.5,0,3.50001,1,4.3,1,4.30001,0),table(t,0,0,3.9,0,3.90001,1,4.3,1,4.30001,0))))))
+.model CONTACT SW(Ron=.01 Roff=1e12 Vt=.6 Vh=-.05)
+.subckt SPST A B params: MODE=0
+BC CT 0 V=swpos(time,MODE)
+S A B CT 0 CONTACT
+.ends
+.subckt SPDT A B C params: MODE=0
+BC CT 0 V=swpos(time,MODE)
+BN CN 0 V=1-V(CT)
+SA A C CN 0 CONTACT
+SB B C CT 0 CONTACT
+.ends
+* Engineering approximations, not manufacturer-validated device models.
+.model IRLZ44N_APPROX VDMOS(Vto=1.5 Kp=20 Rd=.014 Rs=.008 Rg=2 Cgdmax=1n Cgdmin=100p Cgs=1.7n Cjo=700p Is=1n Bv=55)
+.model D5408_APPROX D(Is=20n N=1.7 Rs=.025 Cjo=100p Tt=2u Bv=1000 Ibv=5u)
+.model LED_GREEN D(Is=1e-20 N=2 Rs=10 Cjo=10p)
+.model LED_YELLOW D(Is=3e-20 N=2 Rs=10 Cjo=10p)
+.model LED_RED D(Is=1e-18 N=2 Rs=10 Cjo=10p)
+.model D4148 D(Is=2.52n Rs=.568 N=1.752 Cjo=4p M=.4 Tt=20n)
+.model Q3904 NPN(Is=1e-14 Vaf=100 Bf=300 Ikf=.4 Xtb=1.5 Br=4 Cjc=4p Cje=8p Rb=10 Rc=.1 Re=.1 Tf=.35n Tr=250n)
+.subckt BUZZER5 P N
+RLOAD P N 200
+.ends
