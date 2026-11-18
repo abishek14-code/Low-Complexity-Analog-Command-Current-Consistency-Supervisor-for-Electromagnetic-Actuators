@@ -126,7 +126,6 @@ Other measured values: command-to-delayed-command rising delay **79.08 ms**, min
 ├── hardware/
 │   ├── README.md                 Prototype notes, switch states, test procedure
 │   ├── photos/                   Breadboard photographs
-│   ├── schematics/               REV G hand-build schematic, 7 sheets (PDF + PNG)
 │   └── bom/parts_inventory_source.csv
 └── docs/
     ├── circuit-description.md    Stage-by-stage design explanation
