@@ -5,19 +5,6 @@
 
 Breadboard prototype: discrete ICs (LM358, LM339, 74HC08 x2, 74HC32, 74HC04, 7805), three threshold potentiometers, four status LEDs, a 5 V active buzzer, manual selector switches and an external 12 V normally-closed solenoid valve.
 
-## Schematics (REV G, 27 Oct 2026)
-
-Seven-sheet build set, also as one PDF: [`schematics/REV_G_schematic_7_sheets.pdf`](schematics/REV_G_schematic_7_sheets.pdf).
-
-1. [Power supply, driver, current amplifier](schematics/sheet1_power_driver_amplifier.png)
-2. [Comparators and command settling delay](schematics/sheet2_comparators_command_delay.png)
-3. [Command logic, status LEDs, alarm](schematics/sheet3_logic_leds_alarm.png)
-4. [Socket adapters and component checks](schematics/sheet4_socket_adapters_checks.png)
-5. [Switch wiring, LM358 pins, sense-test circuit](schematics/sheet5_switch_wiring_sense_test.png)
-6. [Potentiometer repair](schematics/sheet6_potentiometer_repair.png)
-7. [Power-off diagnosis and staged restart](schematics/sheet7_diagnosis_staged_restart.png)
-
-These sheets are dated before the LTspice run and photographs, so their footnote "No hardware or SPICE validation is claimed" reflects that date. See the project report for the later results.
 
 ## Switch functions
 
